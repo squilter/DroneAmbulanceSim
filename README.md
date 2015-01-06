@@ -5,7 +5,10 @@ Data taken from [here](https://drive.google.com/folderview?id=0BytkaupSbV7SSnpBV
 
 GUI version prerequisites:
 Python 2-7
+
 pygame 1.9.2 for 2.7 ( pygame.org/downloads ) 32-bit version
+
+geopy
 
 
 If we want to look into police info:
