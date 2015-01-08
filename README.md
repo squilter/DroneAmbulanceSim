@@ -12,20 +12,23 @@ pygame 1.9.2 for 2.7 ( pygame.org/downloads ) 32-bit version
 geopy
 
 
-statistics:
-# of dispatches:
-# of incidents:
-nearest fire station to incident:
+statistics(ignore larger than 10km):
+
+
+number of dispatches:358219
+
+number of incidents:10506
+
+nearest fire station to incidents-
+
 min:4.5m
-max:3655202
-mean:1937
-median:734
-stddev:40847
-nearest fire station to incident(ignore larger than 10km):
-min:4.5m
+
 max:8590
+
 mean:881
+
 median:734
+
 stddev:649
 
 
