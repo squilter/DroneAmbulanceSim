@@ -1,5 +1,7 @@
-#!/bin/python2
+#!/bin/python3
 import csv
+import statistics
+
 from geopy.distance import vincenty
 
 		
@@ -15,20 +17,31 @@ def find_closest_firehouse(incident_coord):
 firehouses=[]
 with open('data/FirehouseData.csv') as firehouse_file:
 	reader = csv.reader(firehouse_file, delimiter=',', quotechar=';')
-	reader.next()#skip the first line with headers
+	next(reader)#skip the first line with headers
 	for row in reader:
 		firehouses.append((float(row[1]),float(row[0])))
 
+distances=[]
 with open('data/incidents_with_latlongs.csv', 'rU') as csvfile:
 	reader = csv.reader(csvfile, delimiter=',', quotechar=';')
-	reader.next()
+	next(reader)
 	latlon=(0,0)
 	for row in reader:
 		try:
 			if((float(row[15]),float(row[16]))!=latlon):
 				latlon=(float(row[15]),float(row[16]))
-				print(find_closest_firehouse(latlon))
+				distance=find_closest_firehouse(latlon)
+				if distance<10000:
+					distances.append(distance)
+					print(distance)
 		except ValueError:
 			print(0)
+
+print("Min: "+ str(min(distances)))
+print("Max: "+ str(max(distances)))
+print("Mean: "+ str(statistics.mean(distances)))
+print("Median: "+ str(statistics.median(distances)))
+print("stdDev: "+ str(statistics.pstdev(distances)))
+
 exit()
 
