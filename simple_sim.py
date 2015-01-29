@@ -33,10 +33,11 @@ with open('data/incidents_with_latlongs.csv', 'rU') as csvfile:
 				distance=find_closest_firehouse(latlon)
 				if distance<10000:
 					distances.append(distance)
-					print(distance)
+					#print(distance)
 		except ValueError:
-			print(0)
-
+			continue
+			#print(0)
+print("Unique: " + str(len(distances)))
 print("Min: "+ str(min(distances)))
 print("Max: "+ str(max(distances)))
 print("Mean: "+ str(statistics.mean(distances)))
