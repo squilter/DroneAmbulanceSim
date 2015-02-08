@@ -15,7 +15,7 @@ def find_closest_firehouse(incident_coord):
 	return closest_distance
 
 firehouses=[]
-with open('data/FirehouseData.csv') as firehouse_file:
+with open('data/chosen_firehouses.csv') as firehouse_file:
 	reader = csv.reader(firehouse_file, delimiter=',', quotechar=';')
 	next(reader)#skip the first line with headers
 	for row in reader:
