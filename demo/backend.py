@@ -17,23 +17,28 @@ def find_closest_firehouse(incident_coord):
         return closest_distance
 
 def convert_meters_to_drone_time(dist):
-	return(5+30+dist/10)
+        return(5+30+dist/10)
 
 def handle_latlon(path):
-	(lat_s,lon_s)=path[1:].split(",",1)
-	(lat,lon)=(float(lat_s),float(lon_s))
-	print(lat)
-	print(lon)
-	print("closest firehouse: ",find_closest_firehouse((lat,lon)))	
-	print("drone time: ",convert_meters_to_drone_time(find_closest_firehouse((lat,lon))))	
+        (lat_s,lon_s)=path[1:].split(",",1)
+        (lat,lon)=(float(lat_s),float(lon_s))
+        print(lat)
+        print(lon)
+        print("closest firehouse: ",find_closest_firehouse((lat,lon)))	
+        print("drone time: ",convert_meters_to_drone_time(find_closest_firehouse((lat,lon))))	
+        for incident in incidents:
+                dist=vincenty((lat,lon),(incident[0],incident[1])).meters
+                if(dist<=150):
+                        print("found incident "+ str(dist)+"m away:")
+                        print(incident)
 
 class MyServer(BaseHTTPRequestHandler):
-	def do_GET(self):
-		self.send_response(200)
-		self.send_header("Content-type","text/html")
-		self.end_headers()
-		handle_latlon(self.path)
-		self.wfile.write(bytes("<html><body><p>seb</p></body></html>","utf-8"))
+        def do_GET(self):
+                self.send_response(200)
+                self.send_header("Content-type","text/html")
+                self.end_headers()
+                handle_latlon(self.path)
+                self.wfile.write(bytes("<html><body><p>seb</p></body></html>","utf-8"))
 
 #preload firehouses
 firehouses=[]
@@ -42,14 +47,25 @@ with open('../data/chosen_firehouses.csv') as firehouse_file:
         next(reader)#skip the first line with headers
         for row in reader:
                 firehouses.append((float(row[1]),float(row[0])))
+
+#preload incident data
+incidents=[]#(lat,lon,response_min,unit_type,date)
+with open('../data/incidents_with_latlongs.csv', 'rU') as csvfile:
+        reader = csv.reader(csvfile, delimiter=',', quotechar=';')
+        next(reader)#skip first row with headers
+        for row in reader:
+                try:
+                        incidents.append((float(row[15]),float(row[16]),float(row[7]),str(row[1]),str(row[5])))
+                except ValueError:
+                        continue
 myServer = HTTPServer((hostName,hostPort), MyServer)
 
 print("Server Started")
 
 try:
-	myServer.serve_forever()
+        myServer.serve_forever()
 except KeyboardInterrupt:
-	pass
+        pass
 
 myServer.server_close()
 print("Server Stopped")
