@@ -20,7 +20,7 @@ def convert_meters_to_drone_time(dist):
         return((5+30+dist/10)/60)
 
 def generate_response(path):
-        response = "<H3>Drone Response Time: "
+        response = "<div id=\"content\"><H3>Drone Response Time: "
         (lat_s,lon_s)=path[1:].split(",",1)
         (lat,lon)=(float(lat_s),float(lon_s))
         drone_dist = find_closest_firehouse((lat,lon))	
@@ -31,7 +31,7 @@ def generate_response(path):
                 response += "N/A"
         response += "</H3><p />"
 
-        response += "<table><col width=\"80\"><col width=\"80\"><col width=\"80\"><tr><td><b>Vehicle</b></td><td><b>Response<br />Time (min)</b></td><td><b>Date</b></td></tr>"
+        response += "<table><col width=\"80\"><col width=\"80\"><col width=\"130\"><tbody><tr><td><b>Vehicle</b></td><td><b>Response<br />Time (min)</b></td><td><b>Date</b></td></tr></tbody></table><div style=\"overflow:auto;max-height:300px;\"><table><col width=\"80\"><col width=\"80\"><col width=\"130\"><tbody>"
         for incident in incidents:
                 if(abs(lat-incident[0])>0.002):# if lat/lon are very different, don't bother caltulating actual dist
                         continue
@@ -44,7 +44,7 @@ def generate_response(path):
                         response += "<td>"+str(round(incident[2],2))+"</td>"#response time
                         response += "<td>"+str(incident[4])+"</td>"#date
                         response += "</tr>"
-        response += "</table>"
+        response += "</div></tbody></table></div>"
         return response
 
 class MyServer(BaseHTTPRequestHandler):
