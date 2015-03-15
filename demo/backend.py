@@ -25,8 +25,9 @@ def generate_response(path):
         (lat,lon)=(float(lat_s),float(lon_s))
         drone_dist = find_closest_firehouse((lat,lon))	
         if(drone_dist<3000):
-                response += str(round(convert_meters_to_drone_time(drone_dist),2))	
-                response += "mins."
+                drone_time = convert_meters_to_drone_time(drone_dist)
+                response += str(int(drone_time)) + ":" + str(int(drone_time%1*60)).zfill(2)	
+                response += " mins"
         else:
                 response += "N/A"
         response += "</H3><p />"
@@ -41,7 +42,7 @@ def generate_response(path):
                 if(dist<=150):
                         response += "<tr>"
                         response += "<td>"+str(incident[3])+"</td>"#vehicle type
-                        response += "<td>"+str(round(incident[2],2))+"</td>"#response time
+                        response += "<td>"+str(int(incident[2])) + ":" + str(int(incident[2]%1*60)).zfill(2)+"</td>"#response time
                         response += "<td>"+str(incident[4])+"</td>"#date
                         response += "</tr>"
         response += "</div></tbody></table></div>"
