@@ -5,7 +5,7 @@ from http.server import BaseHTTPRequestHandler, HTTPServer
 from geopy.distance import vincenty
 
 hostName = ""
-hostPort = 80
+hostPort = 81
 
 def find_closest_firehouse(incident_coord):
         closest_distance = 99999999999
@@ -33,9 +33,9 @@ def generate_response(path):
 
         response += "<table><col width=\"80\"><col width=\"80\"><col width=\"80\"><tr><td><b>Vehicle</b></td><td><b>Response<br />Time (min)</b></td><td><b>Date</b></td></tr>"
         for incident in incidents:
-                if(lat-incident[0]>0.002):# if lat/lon are very different, don't bother caltulating actual dist
+                if(abs(lat-incident[0])>0.002):# if lat/lon are very different, don't bother caltulating actual dist
                         continue
-                if(lon-incident[1]>0.002):
+                if(abs(lon-incident[1])>0.002):
                         continue
                 dist=vincenty((lat,lon),(incident[0],incident[1])).meters
                 if(dist<=150):
